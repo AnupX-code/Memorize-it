@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Memory Game - Anup Raj</title>
+<title>Memory Game - Anup Raj Thapaliya</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
 
 body {
   margin:0;
   font-family:'Audiowide', cursive;
-  background: linear-gradient(135deg,#2c003e,#530066,#7d00a0); /* soft pink-purple vibe */
+  background: linear-gradient(135deg,#2c003e,#530066,#7d00a0); 
   color:#fff;
   display:flex;
   flex-direction:column;
@@ -140,17 +140,46 @@ a:hover {text-shadow:0 0 8px #ffb3dd;}
 <h1>Memory Game🧠</h1>
 
 <div id="start-screen">
-  <button onclick="clickSound(); showLevelScreen()">Check Your Memory🥵</button>
+  <button onclick="clickSound(); showLevelScreen()">Test Your Brain🥵</button>
   <button onclick="clickSound(); showAbout()">About Me👨‍💻</button>
-  <p style="margin-top:30px; font-size:1.2rem; background: linear-gradient(45deg,#ff00ff,#ff3399,#ffcc00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation: neonText 2s ease-in-out infinite alternate;">
-    🔥 Challenge your memory! Neon arcade fun awaits! 🔥
-  </p>
+  <p style="
+  margin-top:30px; 
+  font-size:1.3rem; 
+  font-weight:bold;
+  background: linear-gradient(90deg, #ff0000, #ff4d4d, #ff9999); 
+  -webkit-background-clip:text; 
+  -webkit-text-fill-color:transparent; 
+  text-align:center;
+  animation: neonPulse 1.8s ease-in-out infinite alternate;
+  text-shadow: 0 0 6px #ff4d4d, 0 0 12px #ff0000, 0 0 18px #ff9999;
+">
+🔥 Challenge Your Memory! Neon Arcade Fun Awaits! 🔥
+</p>
+
+<style>
+@keyframes neonPulse {
+  0% {
+    text-shadow: 0 0 6px #ff4d4d, 0 0 12px #ff0000, 0 0 18px #ff9999;
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 0 12px #ff4d4d, 0 0 24px #ff0000, 0 0 36px #ff9999;
+    transform: scale(1.05);
+  }
+  100% {
+    text-shadow: 0 0 6px #ff4d4d, 0 0 12px #ff0000, 0 0 18px #ff9999;
+    transform: scale(1);
+  }
+}
+</style>
+
   <div style="margin-top:20px; font-size:2rem; animation: bounce 1s infinite alternate;">💖✨</div>
 </div>
 
 <div id="level-screen" style="display:none;">
   <p style="font-size:1.2rem; text-shadow:0 0 10px #ff66cc;">Select Level:</p>
   <button onclick="clickSound(); showCategoryScreen('easy')">Easy🟢</button>
+  <button onclick="clickSound(); showCategoryScreen('medium')">Medium🟡</button>
   <button onclick="clickSound(); showCategoryScreen('hard')">Hard🔴</button>
   <button onclick="clickSound(); backToStart()">🔙 Back</button>
 </div>
@@ -175,8 +204,7 @@ a:hover {text-shadow:0 0 8px #ffb3dd;}
 </div>
 
 <div id="timer"></div>
-<button id="quit-btn" style="display:none;" onclick="clickSound(); quitToLevel()">Quit 🚪</button>
-<div id="game-board"></div>
+<button id="quit-btn" style="display:none;" onclick="clickSound(); quitToLevel()">Quit if are unable😅</button>
 <div id="game-board"></div>
 <div id="message"></div>
 
@@ -212,7 +240,7 @@ const categories = {
   alphabets:'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 };
 
-// User gesture to start preBgm (browsers block autoplay)
+// Pre-BGM trigger
 let preBgmPlayed = false;
 document.addEventListener('click', () => {
   if(!preBgmPlayed){
@@ -247,19 +275,18 @@ function backToStart(){
 function startGame(category){
   categoryScreen.style.display='none';
   board.innerHTML='';
-  if(preBgmPlayed) preBgm.pause(); // stop preBgm
-  if(bgm.paused) bgm.play(); // start game BGM
+  if(preBgmPlayed) preBgm.pause();
+  if(bgm.paused) bgm.play();
 
-  // ✅ Define rows and cols for each difficulty
   let rows=4, cols=4, flash=4, countdown=60;
-  if(gameLevel==='easy'){ rows=4; cols=4; flash=5; countdown=60; }   // 3x4 grid
-  if(gameLevel==='hard'){ rows=6; cols=5; flash=3; countdown=180; }   // 5x5 grid
+  if(gameLevel==='easy'){ rows=4; cols=4; flash=5; countdown=75; }
+  if(gameLevel==='medium'){ rows=4; cols=5; flash=4; countdown=150; } // ✅ Medium
+  if(gameLevel==='hard'){ rows=5; cols=6; flash=3; countdown=300; }
 
   totalPairs = Math.floor((rows*cols)/2);
   flashTime = flash;
   countdownTime = countdown;
 
-  // ✅ Use rows and cols for grid template
   board.style.gridTemplateColumns = `repeat(${cols},1fr)`;
   board.style.gridTemplateRows = `repeat(${rows},1fr)`;
 
@@ -290,16 +317,12 @@ function startGame(category){
     timerDisplay.textContent = `Memorize! ${flashCounter}s`;
     if(flashCounter <= 0){
       clearInterval(flashInterval);
-      cards.forEach(c=>{
-        c.textContent='';
-        c.classList.remove('flash');
-      });
+      cards.forEach(c=>{ c.textContent=''; c.classList.remove('flash'); });
       lockBoard=false;
       startCountdown();
     }
   },1000);
 }
-
 
 function quitToLevel() {
   clearInterval(countdownInterval);
@@ -316,7 +339,7 @@ function quitToLevel() {
 }
 
 function startCountdown(){
-  document.getElementById('quit-btn').style.display = 'block'; // Show quit button
+  document.getElementById('quit-btn').style.display = 'block';
   let time = countdownTime;
   timerDisplay.textContent = `⏱️ Time Remaining: ${time}s`;
   countdownInterval = setInterval(()=>{
@@ -330,7 +353,6 @@ function startCountdown(){
     }
   },1000);
 }
-
 
 function flipCard(){
   if(lockBoard) return;
@@ -372,5 +394,3 @@ function shuffleArray(array){ for(let i=array.length-1;i>0;i--){ const j=Math.fl
 </script>
 </body>
 </html>
-
-
