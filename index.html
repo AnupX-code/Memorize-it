@@ -155,9 +155,8 @@ a:hover {text-shadow:0 0 30px #ff66cc;}
 </div>
 
 <div id="level-screen" style="display:none;">
-  <p style="font-size:1.2rem; text-shadow:0 0 10px #ff66cc;">Choose Mode:</p>
+  <p style="font-size:1.2rem; text-shadow:0 0 10px #ff66cc;">Select Level:</p>
   <button onclick="clickSound(); showCategoryScreen('easy')">Easy🟢</button>
-  <button onclick="clickSound(); showCategoryScreen('medium')">Mdium🟡</button>
   <button onclick="clickSound(); showCategoryScreen('hard')">Hard🔴</button>
   <button onclick="clickSound(); backToStart()">🔙 Back</button>
 </div>
@@ -182,7 +181,7 @@ a:hover {text-shadow:0 0 30px #ff66cc;}
 </div>
 
 <div id="timer"></div>
-<button id="quit-btn" style="display:none;" onclick="clickSound(); quitToLevel()">Quit if you Cant😅</button>
+<button id="quit-btn" style="display:none;" onclick="clickSound(); quitToLevel()">Quit 🚪</button>
 <div id="game-board"></div>
 <div id="game-board"></div>
 <div id="message"></div>
@@ -257,17 +256,18 @@ function startGame(category){
   if(preBgmPlayed) preBgm.pause(); // stop preBgm
   if(bgm.paused) bgm.play(); // start game BGM
 
-  let gridSize=4, flash=4, countdown=60;
-  if(gameLevel==='easy'){gridSize=4; flash=5; countdown=60;}
-  if(gameLevel==='medium'){gridSize=5; flash=4; countdown=120;}
-  if(gameLevel==='hard'){gridSize=6; flash=3; countdown=180;}
+  // ✅ Define rows and cols for each difficulty
+  let rows=4, cols=4, flash=4, countdown=60;
+  if(gameLevel==='easy'){ rows=3; cols=4; flash=5; countdown=60; }   // 3x4 grid
+  if(gameLevel==='hard'){ rows=4; cols=4; flash=3; countdown=180; }   // 5x5 grid
 
-  totalPairs = Math.floor((gridSize*gridSize)/2);
+  totalPairs = Math.floor((rows*cols)/2);
   flashTime = flash;
   countdownTime = countdown;
 
-  board.style.gridTemplateColumns = `repeat(${gridSize},1fr)`;
-  board.style.gridTemplateRows = `repeat(${gridSize},1fr)`;
+  // ✅ Use rows and cols for grid template
+  board.style.gridTemplateColumns = `repeat(${cols},1fr)`;
+  board.style.gridTemplateRows = `repeat(${rows},1fr)`;
 
   firstCard=null; secondCard=null; lockBoard=true; matches=0;
 
@@ -305,6 +305,7 @@ function startGame(category){
     }
   },1000);
 }
+
 
 function quitToLevel() {
   clearInterval(countdownInterval);
