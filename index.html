@@ -142,28 +142,30 @@ a:hover {text-shadow:0 0 8px #ffb3dd;}
 <div id="start-screen">
   <button onclick="clickSound(); showLevelScreen()">Test Your Brain🥵</button>
   <button onclick="clickSound(); showAbout()">About Me👨‍💻</button>
-<p class="cool-title">
-  🔥 Challenge your memory! Neon arcade fun awaits! 🔥
+<p class="cute-title">
+  💖✨ Challenge your memory! Neon arcade fun awaits! 💖✨
 </p>
 
 <style>
-.cool-title {
+.cute-title {
   margin-top: 30px;
   font-size: 1.2rem;
   font-weight: bold;
-  background: linear-gradient(90deg, #ff4d4d, #ffcc00, #ff4d4d);
+  background: linear-gradient(90deg, #ff80bf, #ffccf2, #ffe6ff);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradientMove 3s linear infinite;
+  animation: pastelMove 4s ease-in-out infinite;
   text-align: center;
 }
 
-@keyframes gradientMove {
-  0% { background-position: 0% center; }
-  100% { background-position: 200% center; }
+@keyframes pastelMove {
+  0% { background-position: 0% center; transform: scale(1); }
+  50% { background-position: 100% center; transform: scale(1.03); }
+  100% { background-position: 0% center; transform: scale(1); }
 }
 </style>
+
 
 
 <div style="margin-top:20px; font-size:2rem; animation: bounce 1s infinite alternate;">💖✨</div>
@@ -387,6 +389,7 @@ function shuffleArray(array){ for(let i=array.length-1;i>0;i--){ const j=Math.fl
 </script>
 </body>
 </html>
+
 
 
 
