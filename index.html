@@ -325,14 +325,13 @@ function startGame(category){
   },1000);
 }
 
-
-
-function quitToLevel() {
+  function quitToLevel() {
   clearInterval(countdownInterval);
   board.innerHTML = '';
   message.textContent = '';
   timerDisplay.textContent = '';
   document.getElementById('quit-btn').style.display = 'none';
+  document.getElementById('reset-btn').style.display = 'none'; // ✅ hide reset too
   categoryScreen.style.display = 'none';
   aboutScreen.style.display = 'none';
   startScreen.style.display = 'none';
@@ -341,16 +340,18 @@ function quitToLevel() {
   bgm.currentTime = 0;
 }
 
-  function resetGame(){
+function resetGame(){
   clearInterval(countdownInterval);
   board.innerHTML = '';
   message.textContent = '';
   timerDisplay.textContent = '';
-  startGame(currentCategory); // restart same category & level
+  startGame(currentCategory);
 }
+
 
 function startCountdown(){
   document.getElementById('quit-btn').style.display = 'block';
+  document.getElementById('reset-btn').style.display = 'block'; // ✅ show reset
   let time = countdownTime;
   timerDisplay.textContent = `⏱️ Time Remaining: ${time}s`;
   countdownInterval = setInterval(()=>{
@@ -364,6 +365,7 @@ function startCountdown(){
     }
   },1000);
 }
+
 
 function flipCard(){
   if(lockBoard) return;
@@ -405,6 +407,7 @@ function shuffleArray(array){ for(let i=array.length-1;i>0;i--){ const j=Math.fl
 </script>
 </body>
 </html>
+
 
 
 
