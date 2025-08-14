@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memory Game - Anup Raj</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+
+body {
+  margin:0;
+  font-family:'Audiowide', cursive;
+  background: linear-gradient(135deg,#1a001f,#330033,#000);
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-height:100vh;
+}
+
+h1 {
+  margin-top:20px;
+  font-size:3rem;
+  background: linear-gradient(45deg,#ff00ff,#ff3399,#ffcc00,#ff00ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation: neonText 2s ease-in-out infinite alternate;
+  text-align:center;
+}
+
+@keyframes neonText {
+  0% { text-shadow:0 0 10px #ff00ff,0 0 20px #ff3399;}
+  50% { text-shadow:0 0 20px #ffcc00,0 0 40px #ff66ff;}
+  100% { text-shadow:0 0 30px #ff00ff,0 0 60px #ff3399;}
+}
+
+@keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-15px); } }
+@keyframes flashGlow {
+  0% { background:#1a001f; color:#ff00ff; box-shadow:0 0 15px #ff00ff,0 0 30px #ff66ff;}
+  25% { background:#330033; color:#ff3399; box-shadow:0 0 25px #ff3399,0 0 50px #ff66cc;}
+  50% { background:#660066; color:#ffcc00; box-shadow:0 0 35px #ffcc00,0 0 70px #ffff66;}
+  75% { background:#990099; color:#ff3399; box-shadow:0 0 25px #ff3399,0 0 50px #ff66cc;}
+  100% { background:#1a001f; color:#ff00ff; box-shadow:0 0 15px #ff00ff,0 0 30px #ff66ff;}
+}
+
+#start-screen, #category-screen, #about-screen, #level-screen {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin-top:50px;
+}
+
+button {
+  margin:15px 0;
+  padding:15px 30px;
+  font-size:1.2rem;
+  cursor:pointer;
+  border:none;
+  border-radius:20px;
+  background:linear-gradient(45deg,#ff00ff,#ff3399,#ff66cc);
+  color:#fff;
+  box-shadow:0 0 20px #ff00ff,0 0 40px #ff66cc;
+  transition:transform 0.2s, box-shadow 0.2s;
+  width:220px;
+  text-align:center;
+}
+
+button:hover {
+  transform:scale(1.1);
+  box-shadow:0 0 40px #ff3399,0 0 60px #ff66cc;
+}
+
+#game-board {
+  display:grid;
+  gap:12px;
+  margin-top:40px;
+  padding:10px;
+}
+
+.card {
+  width:80px;
+  height:80px;
+  background:#111;
+  border-radius:15px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:2rem;
+  cursor:pointer;
+  color:#111;
+  box-shadow:0 0 15px #ff33cc,0 0 25px #ff66ff;
+  transition:0.3s;
+  position:relative;
+  user-select:none;
+}
+
+.card.flipped {
+  color:#fff;
+  background:#222;
+  box-shadow:0 0 35px #ff00ff,0 0 70px #ff66ff;
+  transform:scale(1.1);
+}
+
+.card.flash {
+  animation: flashGlow 1.5s ease-in-out infinite alternate;
+}
+
+#message {
+  margin-top:20px;
+  font-size:2rem;
+  text-shadow:0 0 15px #ff66cc;
+}
+
+#timer {
+  margin-top:20px;
+  font-size:1.8rem;
+  text-shadow:0 0 15px #ff66cc;
+}
+
+#developer-pic {
+  margin-top:20px;
+  width:150px;
+  height:150px;
+  border-radius:50%;
+  border:4px solid #ff3399;
+  box-shadow:0 0 20px #ff00ff, 0 0 40px #ff66cc;
+  object-fit:cover;
+}
+
+a {
+  color:#ff66cc;
+  text-decoration:none;
+  font-weight:bold;
+  text-shadow:0 0 10px #ff66cc;
+}
+a:hover {text-shadow:0 0 30px #ff66cc;}
+
+@media (max-width:600px){
+  .card { width:60px; height:60px; font-size:1.5rem; }
+  button { width:160px; font-size:1rem; }
+}
+</style>
+</head>
+<body>
+
+<h1>Memory Game🧠</h1>
+
+<div id="start-screen">
+  <button onclick="clickSound(); showLevelScreen()">Check Your Memory🥵</button>
+  <button onclick="clickSound(); showAbout()">About Me👨‍💻</button>
+  <p style="margin-top:30px; font-size:1.2rem; background: linear-gradient(45deg,#ff00ff,#ff3399,#ffcc00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation: neonText 2s ease-in-out infinite alternate;">
+    🔥 Challenge your memory! Neon arcade fun awaits! 🔥
+  </p>
+  <div style="margin-top:20px; font-size:2rem; animation: bounce 1s infinite alternate;">💖✨</div>
+</div>
+
+<div id="level-screen" style="display:none;">
+  <p style="font-size:1.2rem; text-shadow:0 0 10px #ff66cc;">Choose Mode:</p>
+  <button onclick="clickSound(); showCategoryScreen('easy')">Easy🟢</button>
+  <button onclick="clickSound(); showCategoryScreen('medium')">Mdium🟡</button>
+  <button onclick="clickSound(); showCategoryScreen('hard')">Hard🔴</button>
+  <button onclick="clickSound(); backToStart()">🔙 Back</button>
+</div>
+
+<div id="category-screen" style="display:none;">
+  <p style="font-size:1.2rem; text-shadow:0 0 10px #ff66cc;">Select Category:</p>
+  <button onclick="clickSound(); startGame('food')">Food</button>
+  <button onclick="clickSound(); startGame('animals')">Animals</button>
+  <button onclick="clickSound(); startGame('alphabets')">Alphabets</button>
+  <button onclick="clickSound(); backToStart()">🔙 Back</button>
+</div>
+
+<div id="about-screen" style="display:none; text-align:center;">
+  <h2>Anup Raj Thapaliya</h2>
+  <p>Developer of This Memory Game</p>
+  <p>Facebook: <a href="https://www.facebook.com/anupOK11" target="_blank">Click here</a></p>
+  
+  <div style="padding:15px; border-radius:20px; box-shadow:0 0 40px #ff00ff,0 0 60px #ff66cc;">
+    <img id="developer-pic" src="your-image.jpg" alt="Anup Raj" />
+  </div>
+  <button onclick="clickSound(); backToStart()">🔙 Back</button>
+</div>
+
+<div id="timer"></div>
+<button id="quit-btn" style="display:none;" onclick="clickSound(); quitToLevel()">Quit if you Cant😅</button>
+<div id="game-board"></div>
+<div id="game-board"></div>
+<div id="message"></div>
+
+<script>
+// Elements
+let board = document.getElementById('game-board');
+let startScreen = document.getElementById('start-screen');
+let levelScreen = document.getElementById('level-screen');
+let categoryScreen = document.getElementById('category-screen');
+let aboutScreen = document.getElementById('about-screen');
+let message = document.getElementById('message');
+let timerDisplay = document.getElementById('timer');
+
+let firstCard=null, secondCard=null, lockBoard=false, matches=0;
+let totalPairs=8, flashTime=5, gameLevel='easy', countdownInterval, countdownTime=60;
+
+// Sounds
+const clickSoundEffect = new Audio('click.mp3');
+const preBgm = new Audio('preBgm.mp3');
+const flipSound = new Audio('flip.mp3');
+const matchSound = new Audio('match.mp3');
+const mismatchSound = new Audio('mismatch.mp3');
+const winSound = new Audio('win.mp3');
+const loseSound = new Audio('lose.mp3');
+const bgm = new Audio('bgm.mp3');
+bgm.loop = true;
+bgm.volume = 0.3;
+
+// Categories
+const categories = {
+  food:['🍎','🍌','🍇','🍓','🍕','🍔','🍩','🍪','🍉','🥑','🥦','🥯','🍿','🥕','🌽','🥭','🥗','🍫','🍰','🍟','🌮','🌯','🥩','🥓','🍖','🥞','🧁','🍭','🍪','🍩','🍔','🍕','🥪','🥙','🍱','🍣','🍤','🥟','🍜','🥗','🍝'],
+  animals:['🐶','🐱','🦁','🐯','🐷','🐸','🐵','🐰','🦊','🐼','🐨','🐧','🐢','🦄','🐙','🐴','🦖','🐍','🐬','🐳','🐠','🦈','🐊','🐑','🐒','🐦','🐤','🐥','🐺','🐗','🐝','🦋','🦉','🐓','🦃','🦚','🦜','🐘','🐫','🐪'],
+  alphabets:'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+};
+
+// User gesture to start preBgm (browsers block autoplay)
+let preBgmPlayed = false;
+document.addEventListener('click', () => {
+  if(!preBgmPlayed){
+    preBgm.play();
+    preBgm.loop = true;
+    preBgm.volume = 0.3;
+    preBgmPlayed = true;
+  }
+}, { once:true });
+
+// Button click sound
+function clickSound(){ clickSoundEffect.currentTime = 0; clickSoundEffect.play(); }
+
+// Screens
+function showLevelScreen(){ startScreen.style.display='none'; levelScreen.style.display='flex'; }
+function showCategoryScreen(level){ gameLevel=level; levelScreen.style.display='none'; categoryScreen.style.display='flex'; }
+function showAbout(){ startScreen.style.display='none'; aboutScreen.style.display='flex'; }
+function backToStart(){
+  categoryScreen.style.display='none';
+  aboutScreen.style.display='none';
+  levelScreen.style.display='none';
+  startScreen.style.display='flex';
+  board.innerHTML='';
+  message.textContent='';
+  timerDisplay.textContent='';
+  clearInterval(countdownInterval);
+  bgm.pause();
+  bgm.currentTime=0;
+}
+
+// Game
+function startGame(category){
+  categoryScreen.style.display='none';
+  board.innerHTML='';
+  if(preBgmPlayed) preBgm.pause(); // stop preBgm
+  if(bgm.paused) bgm.play(); // start game BGM
+
+  let gridSize=4, flash=4, countdown=60;
+  if(gameLevel==='easy'){gridSize=4; flash=5; countdown=60;}
+  if(gameLevel==='medium'){gridSize=5; flash=4; countdown=120;}
+  if(gameLevel==='hard'){gridSize=6; flash=3; countdown=180;}
+
+  totalPairs = Math.floor((gridSize*gridSize)/2);
+  flashTime = flash;
+  countdownTime = countdown;
+
+  board.style.gridTemplateColumns = `repeat(${gridSize},1fr)`;
+  board.style.gridTemplateRows = `repeat(${gridSize},1fr)`;
+
+  firstCard=null; secondCard=null; lockBoard=true; matches=0;
+
+  let availableSymbols = [...categories[category]];
+  shuffleArray(availableSymbols);
+  let selectedSymbols = availableSymbols.slice(0,totalPairs);
+  let symbols = [...selectedSymbols, ...selectedSymbols];
+  shuffleArray(symbols);
+
+  const cards=[];
+  for(let i=0;i<symbols.length;i++){
+    const card=document.createElement('div');
+    card.classList.add('card');
+    card.dataset.symbol=symbols[i];
+    card.textContent=symbols[i];
+    board.appendChild(card);
+    cards.push(card);
+    card.addEventListener('click', flipCard);
+  }
+
+  cards.forEach(c=>c.classList.add('flash'));
+  let flashCounter = flashTime;
+  timerDisplay.textContent = `Memorize! ${flashCounter}s`;
+  const flashInterval = setInterval(()=>{
+    flashCounter--;
+    timerDisplay.textContent = `Memorize! ${flashCounter}s`;
+    if(flashCounter <= 0){
+      clearInterval(flashInterval);
+      cards.forEach(c=>{
+        c.textContent='';
+        c.classList.remove('flash');
+      });
+      lockBoard=false;
+      startCountdown();
+    }
+  },1000);
+}
+
+function quitToLevel() {
+  clearInterval(countdownInterval);
+  board.innerHTML = '';
+  message.textContent = '';
+  timerDisplay.textContent = '';
+  document.getElementById('quit-btn').style.display = 'none';
+  categoryScreen.style.display = 'none';
+  aboutScreen.style.display = 'none';
+  startScreen.style.display = 'none';
+  levelScreen.style.display = 'flex';
+  bgm.pause();
+  bgm.currentTime = 0;
+}
+
+function startCountdown(){
+  document.getElementById('quit-btn').style.display = 'block'; // Show quit button
+  let time = countdownTime;
+  timerDisplay.textContent = `⏱️ Time Remaining: ${time}s`;
+  countdownInterval = setInterval(()=>{
+    time--;
+    timerDisplay.textContent = `Time: ${time}s`;
+    if(time <= 0){
+      clearInterval(countdownInterval);
+      message.textContent="Time's Up! 😢";
+      loseSound.play();
+      setTimeout(backToStart,3000);
+    }
+  },1000);
+}
+
+
+function flipCard(){
+  if(lockBoard) return;
+  if(this===firstCard) return;
+
+  this.textContent=this.dataset.symbol;
+  this.classList.add('flipped');
+  flipSound.play();
+
+  if(!firstCard){firstCard=this; return;}
+  secondCard=this;
+  lockBoard=true;
+
+  if(firstCard.dataset.symbol===secondCard.dataset.symbol){
+    matches++;
+    matchSound.play();
+    resetFlip();
+    if(matches===totalPairs){
+      clearInterval(countdownInterval);
+      message.textContent="You Won! ❤️";
+      winSound.play();
+      setTimeout(backToStart,3000);
+    }
+  }else{
+    mismatchSound.play();
+    setTimeout(()=>{
+      firstCard.textContent='';
+      secondCard.textContent='';
+      firstCard.classList.remove('flipped');
+      secondCard.classList.remove('flipped');
+      resetFlip();
+    },1000);
+  }
+}
+
+function resetFlip(){ [firstCard,secondCard,lockBoard]=[null,null,false]; }
+function shuffleArray(array){ for(let i=array.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [array[i],array[j]]=[array[j],array[i]]; } }
+
+</script>
+</body>
+</html>
