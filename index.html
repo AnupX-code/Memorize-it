@@ -110,6 +110,28 @@ button:hover {
   text-shadow:0 0 4px #ffb3dd;
 }
 
+#quit-btn, #reset-btn {
+  display:none;
+  padding:12px 25px;
+  font-size:1.1rem;
+  cursor:pointer;
+  border:none;
+  border-radius:15px;
+  background:linear-gradient(45deg,#ff66cc,#ff99cc,#ffb3dd);
+  color:#222;
+  box-shadow:0 0 6px #ff99cc,0 0 12px #ff66cc;
+  transition:transform 0.15s, box-shadow 0.15s;
+}
+
+#quit-btn:hover, #reset-btn:hover {
+  transform:scale(1.05);
+  box-shadow:0 0 10px #ffb3dd,0 0 18px #ff99cc;
+}
+
+#reset-btn.flash {
+  animation: flashGlow 1.2s ease-in-out infinite alternate;
+}
+
 #developer-pic {
   margin-top:20px;
   width:130px;
@@ -200,8 +222,8 @@ a:hover {text-shadow:0 0 8px #ffb3dd;}
 
 <div id="timer"></div>
 <div style="margin-top:15px; display:flex; gap:10px;">
-  <button id="quit-btn" style="display:none;" onclick="clickSound(); quitToLevel()">Quit if unable 😏😅</button>
-  <button id="reset-btn" style="display:none;" onclick="clickSound(); resetGame()">Reset 🔄</button>
+  <button id="quit-btn" style="display:none;" onclick="clickSound(); quitToLevel()">Quit if unable😅</button>
+  <button id="reset-btn" style="display:none;" onclick="clickSound(); resetGame()">Reset🔄</button>
 </div>
 <div id="game-board"></div>
 <div id="message"></div>
@@ -407,6 +429,7 @@ function shuffleArray(array){ for(let i=array.length-1;i>0;i--){ const j=Math.fl
 </script>
 </body>
 </html>
+
 
 
 
