@@ -6,23 +6,27 @@
 <title>Memory Game - Anup Raj Thapaliya</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+
 body {
-      font-family: 'Segoe UI', sans-serif;
-      color: white;
-      text-align: center;
-      margin: 0;
-      padding: 20px;
-    }
+  margin:0;
+  font-family:'Audiowide', cursive;
+  background: linear-gradient(135deg,#2c003e,#530066,#7d00a0); 
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-height:100vh;
+}
 
 h1 {
-      font-size: 2.5rem;
-      color: #39ff14;
-      text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14;
-    }
-
-    .controls {
-      margin: 15px 0;
-    }
+  margin-top:20px;
+  font-size:3rem;
+  background: linear-gradient(45deg,#ff99cc,#ff66cc,#ffb3dd);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation: neonText 2s ease-in-out infinite alternate;
+  text-align:center;
+}
 
 @keyframes neonText {
   0% { text-shadow:0 0 4px #ff99cc,0 0 8px #ff66cc;}
@@ -251,9 +255,9 @@ bgm.volume = 0.3;
 
 // Categories
 const categories = {
-  food:['🍎','🍌','🍇','🍓','🍕','🍔','🍩','🍪','🍉','🥑','🥦','🥯','🍿','🥕','🌽','🥭','🍫','🍰','🍟','🌮','🌯','🥩','🥓','🥞','🧁','🍭','🥪','🍣','🍤','🥟','🍜','🍝','🍋','🍍','🥒','🍆','🥔','🍒','🍊','🍐','🥥','🥨','🍹','🥤','🍢','🍡'],
+  food:['🍎','🍌','🍇','🍓','🍕','🍔','🍩','🍪','🍉','🥑','🥦','🥯','🍿','🥕','🌽','🥭','🍫','🍰','🍟','🌮','🌯','🥩','🥓','🥞','🧁','🍭','🥪','🍣','🍤','🥟','🍜','🍝','🍋','🍍','🥒','🍆','🥔','🍒','🍊','🍐','🥥','🥨','🍹','🥤','🫔','🍢','🍡'],
   animals: ['🐶','🐱','🦁','🐯','🐷','🐸','🐵','🐰','🦊','🐼','🐨','🐧','🐢','🦄','🐙','🐴','🦖','🐍','🐬','🐳','🐠','🦈','🐊','🐑','🐒','🐦','🐤','🐥','🐺','🐗','🐝','🦋','🦉','🐓','🦃','🦚','🦜','🐘','🐫','🐪',
-  '🦩','🦢','🦆','🦦','🦨','🦫','🦡','🦥','🦘','🦝','🐿️','🦔','🦇','🐌','🐛','🦟','🦗','🐜','🐞','🦀','🦞','🦐','🦑','🐡','🐟','🦧','🦍','🐄','🐎','🐏'
+  '🦩','🦢','🦆','🦦','🦨','🦫','🦡','🦥','🦘','🦝','🐿️','🦔','🦇','🐌','🐛','🦟','🦗','🐜','🐞','🦀','🦞','🦐','🦑','🐡','🐟','🦧','🦍','🦣','🐄','🐎','🐏'
 ],
   alphabets:'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 };
@@ -300,7 +304,7 @@ function startGame(category){
   let rows=4, cols=4, flash=4, countdown=60;
   if(gameLevel==='easy'){ rows=4; cols=4; flash=5; countdown=75; }
   if(gameLevel==='medium'){ rows=5; cols=4; flash=4; countdown=150; }
-  if(gameLevel==='hard'){ rows=7; cols=5; flash=3; countdown=270; }
+  if(gameLevel==='hard'){ rows=6; cols=5; flash=3; countdown=300; }
 
   totalPairs = Math.floor((rows*cols)/2);
   flashTime = flash;
@@ -374,7 +378,7 @@ function startCountdown(){
   timerDisplay.textContent = `⏱️ Time Remaining: ${time}s`;
   countdownInterval = setInterval(()=>{
     time--;
-    timerDisplay.textContent = `Time⏱️: ${time}s`;
+    timerDisplay.textContent = `Time: ${time}s`;
     if(time <= 0){
       clearInterval(countdownInterval);
       message.textContent="Time's Up! 😢";
@@ -425,10 +429,6 @@ function shuffleArray(array){ for(let i=array.length-1;i>0;i--){ const j=Math.fl
 </script>
 </body>
 </html>
-
-
-
-
 
 
 
